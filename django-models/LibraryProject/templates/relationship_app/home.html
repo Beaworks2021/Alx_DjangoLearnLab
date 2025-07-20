@@ -1,0 +1,89 @@
+<!-- relationship_app/templates/relationship_app/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .navigation {
+            margin-top: 30px;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Library Management System</h1>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">{{ total_books }}</div>
+                <div>Books</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ total_libraries }}</div>
+                <div>Libraries</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">{{ total_authors }}</div>
+                <div>Authors</div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <h2>Navigate to:</h2>
+            <a href="{% url 'relationship_app:list_books' %}" class="nav-link">View All Books</a>
+            <a href="{% url 'relationship_app:library_list' %}" class="nav-link">View All Libraries</a>
+        </div>
+    </div>
+</body>
+</html>
