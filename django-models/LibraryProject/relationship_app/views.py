@@ -73,34 +73,6 @@ def register_view(request):
     return render(request, 'relationship_app/register.html', {'form': form})
 
 
-def login_view(request):
-    """
-    View for user login
-    """
-    from django.contrib.auth import authenticate, login
-    from django.contrib.auth.forms import AuthenticationForm
-    
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('relationship_app:list_books')
-    else:
-        form = AuthenticationForm()
-    
-    return render(request, 'relationship_app/login.html', {'form': form})
 
-
-def logout_view(request):
-    """
-    View for user logout
-    """
-    from django.contrib.auth import logout
-    logout(request)
-    return render(request, 'relationship_app/logout.html')
 
 
