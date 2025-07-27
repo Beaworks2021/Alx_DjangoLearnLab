@@ -4,9 +4,9 @@ from django.views.generic.detail import DetailView
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, Library, Author, Librarian
+from .models import Book, Library, Author, Librarian, UserProfile
 
 # Home view (no authentication required)
 def home_view(request):
@@ -71,6 +71,66 @@ def register_view(request):
         form = UserCreationForm()
     
     return render(request, 'relationship_app/register.html', {'form': form})
+
+
+# Role-based access control functions
+def is_admin(user):
+    """Check if user has Admin role"""
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Admin'
+
+def is_librarian(user):
+    """Check if user has Librarian role"""
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Librarian'
+
+def is_member(user):
+    """Check if user has Member role"""
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Member'
+
+
+# Role-based views
+@login_required
+@user_passes_test(is_admin, login_url='/relationship/login/')
+def admin_view(request):
+    """
+    Admin view - only accessible to users with Admin role
+    """
+    context = {
+        'user': request.user,
+        'role': request.user.profile.role,
+        'total_users': UserProfile.objects.count(),
+        'total_books': Book.objects.count(),
+        'total_libraries': Library.objects.count(),
+    }
+    return render(request, 'relationship_app/admin_view.html', context)
+
+
+@login_required
+@user_passes_test(is_librarian, login_url='/relationship/login/')
+def librarian_view(request):
+    """
+    Librarian view - only accessible to users with Librarian role
+    """
+    context = {
+        'user': request.user,
+        'role': request.user.profile.role,
+        'books': Book.objects.all()[:10],  # Show recent books
+        'libraries': Library.objects.all(),
+    }
+    return render(request, 'relationship_app/librarian_view.html', context)
+
+
+@login_required
+@user_passes_test(is_member, login_url='/relationship/login/')
+def member_view(request):
+    """
+    Member view - only accessible to users with Member role
+    """
+    context = {
+        'user': request.user,
+        'role': request.user.profile.role,
+        'available_books': Book.objects.all()[:20],  # Show available books
+    }
+    return render(request, 'relationship_app/member_view.html', context)
 
 
 
