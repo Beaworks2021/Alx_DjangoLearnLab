@@ -70,7 +70,6 @@ def is_member(user):
 
 #### Admin View
 ```python
-@login_required
 @user_passes_test(is_admin, login_url='/relationship/login/')
 def admin_view(request):
     """
@@ -88,7 +87,6 @@ def admin_view(request):
 
 #### Librarian View
 ```python
-@login_required
 @user_passes_test(is_librarian, login_url='/relationship/login/')
 def librarian_view(request):
     """
@@ -105,7 +103,6 @@ def librarian_view(request):
 
 #### Member View
 ```python
-@login_required
 @user_passes_test(is_member, login_url='/relationship/login/')
 def member_view(request):
     """
@@ -186,11 +183,12 @@ urlpatterns = [
 
 **Role-Based Access Control Test Results:**
 - ✅ **User Creation:** Successfully created users with different roles
-- ✅ **Admin Access:** Admin can access admin view
-- ✅ **Librarian Access:** Librarian can access librarian view
-- ✅ **Member Access:** Member can access member view
-- ✅ **Unauthenticated Access:** Properly redirected to login
-- ✅ **Role Isolation:** Users cannot access views for other roles
+- ✅ **Admin Access:** Admin can access admin view (200 status)
+- ✅ **Librarian Access:** Librarian can access librarian view (200 status)
+- ✅ **Member Access:** Member can access member view (200 status)
+- ✅ **Unauthenticated Access:** Properly redirected to login (302 status)
+- ✅ **Role Isolation:** Users without proper roles are redirected to login (302 status)
+- ✅ **@user_passes_test Decorator:** Correctly implemented and functioning
 
 ### Key Features Implemented
 

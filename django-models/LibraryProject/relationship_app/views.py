@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Book, Library, Author, Librarian, UserProfile
 
@@ -87,8 +88,10 @@ def is_member(user):
     return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Member'
 
 
+
+
+
 # Role-based views
-@login_required
 @user_passes_test(is_admin, login_url='/relationship/login/')
 def admin_view(request):
     """
@@ -104,7 +107,6 @@ def admin_view(request):
     return render(request, 'relationship_app/admin_view.html', context)
 
 
-@login_required
 @user_passes_test(is_librarian, login_url='/relationship/login/')
 def librarian_view(request):
     """
@@ -119,7 +121,6 @@ def librarian_view(request):
     return render(request, 'relationship_app/librarian_view.html', context)
 
 
-@login_required
 @user_passes_test(is_member, login_url='/relationship/login/')
 def member_view(request):
     """
